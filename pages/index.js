@@ -1,11 +1,30 @@
 import Head from "next/head";
-import Link from "next/link";
-import {useRouter} from "next/router";
 import AppLayout from "@/components/AppLayout";
+import Image from "next/image";
+import {colors} from "@/styles/theme";
+import Button from "@/components/Button";
+import GitHub from "@/components/icons/GitHub";
+
+import {loginWithGitHub, onAuthStateChanged} from "@/firebase/client";
+import {useEffect, useState} from "react";
 
 export default function Home() {
-  const router = useRouter();
+  const [user, setUser] = useState(undefined)
 
+  useEffect(() => {
+    onAuthStateChanged(user => setUser(user))
+  }, [])
+
+  const handleClick = () => {
+    loginWithGitHub()
+      .then(user => {
+        const {avatar, username, url} = user
+        setUser(user)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
 
   return (
     <>
@@ -16,27 +35,59 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico"/>
       </Head>
       <AppLayout>
-        <h1>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-        <nav>
-          <Link href="/timeline">
-              Timeline
-          </Link>
-        </nav>
+        <section>
+          <Image src='/luisjo-dev.svg' alt='Logo' title="" width={120} height={50}/>
+          <h1>
+            Devter
+          </h1>
+          <h2>
+            Talk about development with developers 👩‍💻️👨‍💻️
+          </h2>
+          <div>
+            {
+              user === null &&
+              (<Button onClick={handleClick}>
+                <GitHub fill="#fff" width={24} height={24}/>
+                Login with GitHub
+              </Button>)
+            }
+            {
+              user?.username &&
+              (<div>
+                <p>¡Hola {user.username}!</p>
+                <Image src={user.avatar} alt={user.username} width={40} height={40}/>
+              </div>)
+            }
+          </div>
+
+        </section>
       </AppLayout>
 
       <style jsx>{`
-          h1 {
-              text-align: center;
-              font-size: 48px;
+          section {
+              display: grid;
+              height: 100%;
+              place-items: center;
+              place-content: center;
           }
 
-          nav {
-              font-size: 24px;
-              text-align: center;
+          div {
+              margin-top: 16px;
           }
-      `}</style>
+
+          h1 {
+              color: ${colors.primary};
+              font-weight: 800;
+              margin-bottom: 16px;
+          }
+
+          h2 {
+              color: ${colors.secondary};
+              font-size: 21px;
+              margin: 0;
+          }
+      `}
+      </style>
     </>
   );
 }
