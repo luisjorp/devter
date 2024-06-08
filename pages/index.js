@@ -1,10 +1,11 @@
 import Head from "next/head";
-import Link from "next/link";
-import {useRouter} from "next/router";
 import AppLayout from "@/components/AppLayout";
+import Image from "next/image";
+import {colors} from "@/styles/theme";
+import Button from "@/components/Button";
+import GitHub from "@/components/icons/GitHub";
 
 export default function Home() {
-  const router = useRouter();
 
 
   return (
@@ -16,27 +17,49 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico"/>
       </Head>
       <AppLayout>
-        <h1>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-        <nav>
-          <Link href="/timeline">
-              Timeline
-          </Link>
-        </nav>
+        <section>
+          <Image src='/luisjo-dev.svg' alt='Logo' title="" width={120} height={50}/>
+          <h1>
+            Devter
+          </h1>
+          <h2>
+            Talk about development with developers 👩‍💻️👨‍💻️
+          </h2>
+          <div>
+            <Button>
+              <GitHub fill="#fff" width={24} height={24}/>
+              Login with GitHub
+            </Button>
+          </div>
+
+        </section>
       </AppLayout>
 
       <style jsx>{`
-          h1 {
-              text-align: center;
-              font-size: 48px;
+          section {
+              display: grid;
+              height: 100%;
+              place-items: center;
+              place-content: center;
           }
 
-          nav {
-              font-size: 24px;
-              text-align: center;
+          div {
+              margin-top: 16px;
           }
-      `}</style>
+
+          h1 {
+              color: ${colors.primary};
+              font-weight: 800;
+              margin-bottom: 16px;
+          }
+
+          h2 {
+              color: ${colors.secondary};
+              font-size: 21px;
+              margin: 0;
+          }
+      `}
+      </style>
     </>
   );
 }
