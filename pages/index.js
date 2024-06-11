@@ -1,11 +1,15 @@
-import Head from "next/head"
-import AppLayout from "@/components/AppLayout"
-import Image from "next/image"
-import { colors } from "@/styles/theme"
-import Button from "@/components/Button"
-import GitHub from "@/components/icons/GitHub"
-import { loginWithGitHub, onAuthStateChanged } from "@/firebase/client"
 import { useEffect, useState } from "react"
+import Head from "next/head"
+
+import { colors } from "@styles/theme"
+
+import { loginWithGitHub, onAuthStateChanged } from "@/firebase/client"
+
+import AppLayout from "@components/AppLayout"
+import Avatar from "@components/Avatar"
+import Button from "@components/Button"
+import GitHub from "@components/icons/GitHub"
+import Logo from "@components/icons/Logo"
 
 export default function Home() {
   const [user, setUser] = useState(undefined)
@@ -34,13 +38,7 @@ export default function Home() {
       </Head>
       <AppLayout>
         <section>
-          <Image
-            src="/luisjo-dev.svg"
-            alt="Logo"
-            title=""
-            width={120}
-            height={50}
-          />
+          <Logo />
           <h1>Devter</h1>
           <h2>Talk about development with developers 👩‍💻️👨‍💻️</h2>
           <div>
@@ -51,15 +49,12 @@ export default function Home() {
               </Button>
             )}
             {user?.username && (
-              <div>
-                <p>¡Hola {user.username}!</p>
-                <Image
-                  src={user.avatar}
-                  alt={user.username}
-                  width={40}
-                  height={40}
-                />
-              </div>
+              <Avatar
+                src={user.avatar}
+                alt={user.username}
+                text={user.username}
+                withText={true}
+              />
             )}
           </div>
         </section>
