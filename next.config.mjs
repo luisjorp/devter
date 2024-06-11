@@ -8,6 +8,12 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'avatars.githubusercontent.com',
         port: '',
+      },
+      {
+        // This pattern is used to load images from the Twitter CDN
+        protocol: 'https',
+        hostname: 'pbs.twimg.com',
+        port: '',
       }
     ],
   },
