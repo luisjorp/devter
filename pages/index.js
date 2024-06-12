@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 import Head from "next/head"
 
+import { useRouter } from "next/router"
+
 import { colors } from "@styles/theme"
 
 import { loginWithGitHub, onAuthStateChanged } from "@/firebase/client"
@@ -10,13 +12,19 @@ import Avatar from "@components/Avatar"
 import Button from "@components/Button"
 import GitHub from "@components/icons/GitHub"
 import Logo from "@components/icons/Logo"
+import Loader from "@components/Loader"
 
 export default function Home() {
   const [user, setUser] = useState(undefined)
+  const router = useRouter()
 
   useEffect(() => {
     onAuthStateChanged((user) => setUser(user))
   }, [])
+
+  useEffect(() => {
+    user && router.replace("/home")
+  }, [user])
 
   const handleClick = () => {
     loginWithGitHub()
@@ -48,14 +56,7 @@ export default function Home() {
                 Login with GitHub
               </Button>
             )}
-            {user?.username && (
-              <Avatar
-                src={user.avatar}
-                alt={user.username}
-                text={user.username}
-                withText={true}
-              />
-            )}
+            {user === undefined && <Loader />}
           </div>
         </section>
       </AppLayout>
