@@ -1,15 +1,18 @@
 import AppLayout from "@components/AppLayout"
 import { useEffect, useState } from "react"
 import Devit from "@components/Devit"
+import useUser from "@/hooks/useUser"
 
 export default function Home() {
   const [timeline, setTimeline] = useState([])
+  const user = useUser()
 
   useEffect(() => {
-    fetch("/api/statuses/home_timeline")
-      .then((res) => res.json())
-      .then(setTimeline)
-  }, [])
+    user &&
+      fetch("/api/statuses/home_timeline")
+        .then((res) => res.json())
+        .then(setTimeline)
+  }, [user])
 
   return (
     <>
@@ -32,6 +35,8 @@ export default function Home() {
       </AppLayout>
       <style jsx>{`
         header {
+          background-color: #ffffffaa;
+          backdrop-filter: blur(5px);
           border-bottom: 1px solid #ccc;
           height: 49px;
           position: sticky;
@@ -44,16 +49,15 @@ export default function Home() {
         h2 {
           font-size: 21px;
           font-weight: 800;
+          padding-left: 15px;
         }
 
-        section {
-          padding-top: 56px;
-        }
         nav {
-          bottom: 0;
-          border-top: 1px solid #ccc;
+          background: #ffffff;
+          bottom: -1px;
+          border-top: 1px solid #eee;
           height: 49px;
-          position: fixed;
+          position: sticky;
           width: 100%;
         }
       `}</style>
