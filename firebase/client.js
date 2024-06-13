@@ -1,5 +1,6 @@
 import firebase from "firebase/compat/app"
 import "firebase/compat/auth"
+import "firebase/compat/firestore"
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
@@ -14,6 +15,8 @@ const firebaseConfig = {
 
 // Check that firebase has not already been initialized
 !firebase.apps.length && firebase.initializeApp(firebaseConfig)
+
+const db = firebase.firestore()
 
 const mapUserFromFirebaseAuthToUserObject = (user) => {
   const { displayName, email, photoURL, uid } = user
@@ -45,4 +48,33 @@ export const onAuthStateChanged = (onChange) => {
   })
 }
 
-export const addDevit = ({ avatar, content, userId, userName }) => {}
+export const addDevit = ({ avatar, content, userId, userName }) => {
+  return db.collection("devits").add({
+    avatar,
+    content,
+    userId,
+    userName,
+    createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
+    likesCount: 0,
+    sharedCount: 0,
+  })
+}
+
+export const fetchLatestDevits = () => {
+  return db
+    .collection("devits")
+    .get()
+    .then(({ docs }) => {
+      return docs.map((doc) => {
+        const data = doc.data()
+        const id = doc.id
+        const { createdAt } = data
+
+        return {
+          ...data,
+          id,
+          createdAt: +createdAt.toDate(),
+        }
+      })
+    })
+}

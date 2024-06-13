@@ -2,16 +2,21 @@ import AppLayout from "@components/AppLayout"
 import { useEffect, useState } from "react"
 import Devit from "@components/Devit"
 import useUser from "@/hooks/useUser"
+import { fetchLatestDevits } from "@/firebase/client"
+import Loader from "@components/Loader"
 
 export default function Home() {
   const [timeline, setTimeline] = useState([])
+  const [loading, setLoading] = useState(true)
   const user = useUser()
 
   useEffect(() => {
-    user &&
-      fetch("/api/statuses/home_timeline")
-        .then((res) => res.json())
-        .then(setTimeline)
+    if (user) {
+      fetchLatestDevits().then((devits) => {
+        setTimeline(devits)
+        setLoading(false)
+      })
+    }
   }, [user])
 
   return (
@@ -20,17 +25,23 @@ export default function Home() {
         <header>
           <h2>Inicio</h2>
         </header>
-        <section>
-          {timeline.map((devit) => (
-            <Devit
-              avatar={devit.avatar}
-              id={devit.id}
-              key={devit.id}
-              message={devit.message}
-              username={devit.username}
-            />
-          ))}
-        </section>
+        {loading ? (
+          <Loader />
+        ) : (
+          <section>
+            {timeline.map((devit) => (
+              <Devit
+                avatar={devit.avatar}
+                content={devit.content}
+                createdAt={devit.createdAt}
+                id={devit.id}
+                key={devit.id}
+                userId={devit.userId}
+                userName={devit.userName}
+              />
+            ))}
+          </section>
+        )}
         <nav></nav>
       </AppLayout>
       <style jsx>{`
