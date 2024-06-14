@@ -1,5 +1,6 @@
-import firebase from 'firebase/compat/app'
-import 'firebase/compat/auth'
+import firebase from "firebase/compat/app"
+import "firebase/compat/auth"
+import "firebase/compat/firestore"
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
@@ -9,34 +10,71 @@ const firebaseConfig = {
   storageBucket: "devter-luisjo.appspot.com",
   messagingSenderId: "283260943802",
   appId: "1:283260943802:web:771233a800b6b259887183",
-  measurementId: "G-0RCMVYZVZX"
+  measurementId: "G-0RCMVYZVZX",
 }
 
 // Check that firebase has not already been initialized
 !firebase.apps.length && firebase.initializeApp(firebaseConfig)
 
+const db = firebase.firestore()
+
 const mapUserFromFirebaseAuthToUserObject = (user) => {
-  const {displayName, email, photoURL} = user
+  const { displayName, email, photoURL, uid } = user
 
   return {
     username: displayName,
     avatar: photoURL,
-    email
+    email,
+    uid,
   }
 }
 
 export const loginWithGitHub = () => {
   const githubProvider = new firebase.auth.GithubAuthProvider()
-  return firebase.auth().signInWithPopup(githubProvider)
-    .then(user => {
+  return firebase
+    .auth()
+    .signInWithPopup(githubProvider)
+    .then((user) => {
       return mapUserFromFirebaseAuthToUserObject(user.user)
     })
 }
 
 export const onAuthStateChanged = (onChange) => {
-  return firebase.auth().onAuthStateChanged(user => {
-      const normalizedUser = user ? mapUserFromFirebaseAuthToUserObject(user) : null
-      onChange(normalizedUser)
-    }
-  )
+  return firebase.auth().onAuthStateChanged((user) => {
+    const normalizedUser = user
+      ? mapUserFromFirebaseAuthToUserObject(user)
+      : null
+    onChange(normalizedUser)
+  })
+}
+
+export const addDevit = ({ avatar, content, userId, userName }) => {
+  return db.collection("devits").add({
+    avatar,
+    content,
+    userId,
+    userName,
+    createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
+    likesCount: 0,
+    sharedCount: 0,
+  })
+}
+
+export const fetchLatestDevits = () => {
+  return db
+    .collection("devits")
+    .get()
+    .then(({ docs }) => {
+      return docs.map((doc) => {
+        const data = doc.data()
+        const id = doc.id
+        const { createdAt } = data
+
+        return {
+          ...data,
+          id,
+          createdAt: +createdAt.toDate(),
+        }
+      })
+    })
 }
