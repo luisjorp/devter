@@ -1,6 +1,8 @@
 import firebase from "firebase/compat/app"
 import "firebase/compat/auth"
 import "firebase/compat/firestore"
+import "firebase/compat/storage"
+import getBase64 from "@/plaiceholder/client"
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
@@ -48,10 +50,11 @@ export const onAuthStateChanged = (onChange) => {
   })
 }
 
-export const addDevit = ({ avatar, content, userId, userName }) => {
+export const addDevit = ({ avatar, content, img, userId, userName }) => {
   return db.collection("devits").add({
     avatar,
     content,
+    img,
     userId,
     userName,
     createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
@@ -63,18 +66,36 @@ export const addDevit = ({ avatar, content, userId, userName }) => {
 export const fetchLatestDevits = () => {
   return db
     .collection("devits")
+    .orderBy("createdAt", "desc")
     .get()
     .then(({ docs }) => {
-      return docs.map((doc) => {
+      const promises = docs.map((doc) => {
         const data = doc.data()
         const id = doc.id
-        const { createdAt } = data
+        const { createdAt, img } = data
+        let base64Promise = Promise.resolve(null)
 
-        return {
-          ...data,
-          id,
-          createdAt: +createdAt.toDate(),
+        if (img) {
+          base64Promise = getBase64(img).then((b64) => {
+            return b64
+          })
         }
+
+        return base64Promise.then((base64) => ({
+          ...data,
+          base64,
+          createdAt: +createdAt.toDate(),
+          id,
+        }))
       })
+
+      return Promise.all(promises)
     })
+}
+
+export const uploadImage = (file) => {
+  const ref = firebase.storage().ref(`/images/${file.name}`)
+  const task = ref.put(file)
+
+  return task
 }
