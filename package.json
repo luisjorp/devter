@@ -9,11 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@plaiceholder/next": "^3.0.0",
     "firebase": "^10.12.2",
     "ldrs": "^1.0.2",
     "next": "^14.2.3",
+    "plaiceholder": "^3.0.0",
     "react": "18.2.0",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "sharp": "^0.33.4"
   },
   "devDependencies": {
     "prettier": "3.3.2"
