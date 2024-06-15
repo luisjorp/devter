@@ -1,10 +1,12 @@
 import Avatar from "@components/Avatar"
 import useTimeAgo from "@/hooks/useTimeAgo"
+import Image from "next/image"
 
 export default function Devit({
   avatar,
   userName,
   id,
+  img,
   content,
   createdAt,
   userId,
@@ -24,6 +26,21 @@ export default function Devit({
             <time>{timeAgo}</time>
           </header>
           <p>{content}</p>
+          {img && (
+            <Image
+              src={img}
+              alt={content}
+              width={0}
+              height={0}
+              sizes="100vw"
+              style={{
+                borderRadius: "10px",
+                height: "auto",
+                marginTop: "10px",
+                width: "100%",
+              }}
+            />
+          )}
         </section>
       </article>
       <style jsx>{`
