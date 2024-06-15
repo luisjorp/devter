@@ -1,16 +1,15 @@
 import Avatar from "@components/Avatar"
 import useTimeAgo from "@/hooks/useTimeAgo"
 import Image from "next/image"
-import ImageSrc from "@/public/image.jpg"
-
 export default function Devit({
   avatar,
-  userName,
-  id,
-  img,
+  base64,
   content,
   createdAt,
+  id,
+  img,
   userId,
+  userName,
 }) {
   const timeAgo = useTimeAgo(createdAt)
 
@@ -29,11 +28,13 @@ export default function Devit({
           <p>{content}</p>
           {img && (
             <Image
-              src={ImageSrc}
-              placeholder="blur"
+              src={img}
               alt={content}
+              placeholder="blur"
+              blurDataURL={base64}
               width={0}
               height={0}
+              priority={true}
               sizes="(max-width: 600px) 100vw, 600px" // if the viewport is less than 600px, the image will take up 100% of the viewport width, otherwise it will take up 600px since is mobile only
               style={{
                 borderRadius: "10px",
