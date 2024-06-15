@@ -1,6 +1,7 @@
 import Avatar from "@components/Avatar"
 import useTimeAgo from "@/hooks/useTimeAgo"
 import Image from "next/image"
+import ImageSrc from "@/public/image.jpg"
 
 export default function Devit({
   avatar,
@@ -28,11 +29,12 @@ export default function Devit({
           <p>{content}</p>
           {img && (
             <Image
-              src={img}
+              src={ImageSrc}
+              placeholder="blur"
               alt={content}
               width={0}
               height={0}
-              sizes="100vw"
+              sizes="(max-width: 600px) 100vw, 600px" // if the viewport is less than 600px, the image will take up 100% of the viewport width, otherwise it will take up 600px since is mobile only
               style={{
                 borderRadius: "10px",
                 height: "auto",
@@ -48,6 +50,10 @@ export default function Devit({
           border-bottom: 1px solid #eee;
           display: flex;
           padding: 10px 15px;
+        }
+
+        section {
+          flex: 1;
         }
 
         div {

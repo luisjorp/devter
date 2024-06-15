@@ -126,7 +126,7 @@ export default function ComposeTweet() {
                   alt="image"
                   width={0}
                   height={0}
-                  sizes="100vw"
+                  sizes="(max-width: 600px) 100vw, 600px"
                   style={{
                     width: "100%",
                     height: "auto",
