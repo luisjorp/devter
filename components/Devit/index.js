@@ -2,6 +2,7 @@ import Avatar from "@components/Avatar"
 import useTimeAgo from "@/hooks/useTimeAgo"
 import Image from "next/image"
 import useDateTimeFormat from "@/hooks/useDateTimeFormat"
+import Link from "next/link"
 export default function Devit({
   avatar,
   base64,
@@ -25,7 +26,9 @@ export default function Devit({
           <header>
             <strong>{userName}</strong>
             <span> · </span>
-            <time title={createdAtFormatted}>{timeAgo}</time>
+            <Link href={`/status/${id}`}>
+              <time title={createdAtFormatted}>{timeAgo}</time>
+            </Link>
           </header>
           <p>{content}</p>
           {img && (
