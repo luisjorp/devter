@@ -7,7 +7,6 @@ import { colors } from "@styles/theme"
 
 import { loginWithGitHub } from "@/firebase/client"
 
-import AppLayout from "@components/AppLayout"
 import Button from "@components/Button"
 import GitHub from "@components/icons/GitHub"
 import Logo from "@components/icons/Logo"
@@ -36,22 +35,20 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <AppLayout>
-        <section>
-          <Logo />
-          <h1>Devter</h1>
-          <h2>Talk about development with developers 👩‍💻️👨‍💻️</h2>
-          <div>
-            {user === USER_STATES.NOT_LOGGED && (
-              <Button onClick={handleClick}>
-                <GitHub fill="#fff" width={24} height={24} />
-                Login with GitHub
-              </Button>
-            )}
-            {user === USER_STATES.NOT_KNOWN && <Loader />}
-          </div>
-        </section>
-      </AppLayout>
+      <section>
+        <Logo />
+        <h1>Devter</h1>
+        <h2>Talk about development with developers 👩‍💻️👨‍💻️</h2>
+        <div>
+          {user === USER_STATES.NOT_LOGGED && (
+            <Button onClick={handleClick}>
+              <GitHub fill="#fff" width={24} height={24} />
+              Login with GitHub
+            </Button>
+          )}
+          {user === USER_STATES.NOT_KNOWN && <Loader />}
+        </div>
+      </section>
 
       <style jsx>
         {`

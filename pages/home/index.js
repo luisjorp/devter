@@ -1,4 +1,3 @@
-import AppLayout from "@components/AppLayout"
 import { useEffect, useState } from "react"
 import Devit from "@components/Devit"
 import useUser from "@/hooks/useUser"
@@ -26,44 +25,42 @@ export default function HomePage() {
 
   return (
     <>
-      <AppLayout>
-        <Head>
-          <title>Inicio / Devter 🐦</title>
-        </Head>
-        <header>
-          <h2>Inicio</h2>
-        </header>
-        {loading ? (
-          <Loader />
-        ) : (
-          <section>
-            {timeline.map((devit) => (
-              <Devit
-                avatar={devit.avatar}
-                content={devit.content}
-                createdAt={devit.createdAt}
-                id={devit.id}
-                img={devit.img}
-                base64={devit.base64}
-                key={devit.id}
-                userId={devit.userId}
-                userName={devit.userName}
-              />
-            ))}
-          </section>
-        )}
-        <nav>
-          <Link href="/home">
-            <Home stroke="#09f" width={32} height={32} />
-          </Link>
-          <Link href="/search">
-            <Search stroke="#09f" width={32} height={32} />
-          </Link>
-          <Link href="/compose/tweet">
-            <Create stroke="#09f" width={32} height={32} />
-          </Link>
-        </nav>
-      </AppLayout>
+      <Head>
+        <title>Inicio / Devter 🐦</title>
+      </Head>
+      <header>
+        <h2>Inicio</h2>
+      </header>
+      {loading ? (
+        <Loader />
+      ) : (
+        <section>
+          {timeline.map((devit) => (
+            <Devit
+              avatar={devit.avatar}
+              content={devit.content}
+              createdAt={devit.createdAt}
+              id={devit.id}
+              img={devit.img}
+              imgBase64={devit.imgBase64}
+              key={devit.id}
+              userId={devit.userId}
+              userName={devit.userName}
+            />
+          ))}
+        </section>
+      )}
+      <nav>
+        <Link href="/home">
+          <Home stroke="#09f" width={32} height={32} />
+        </Link>
+        <Link href="/search">
+          <Search stroke="#09f" width={32} height={32} />
+        </Link>
+        <Link href="/compose/tweet">
+          <Create stroke="#09f" width={32} height={32} />
+        </Link>
+      </nav>
       <style jsx>{`
         header {
           background-color: #ffffffaa;

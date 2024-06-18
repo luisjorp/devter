@@ -1,4 +1,3 @@
-import AppLayout from "@components/AppLayout"
 import Button from "@components/Button"
 import useUser from "@/hooks/useUser"
 import { useEffect, useState } from "react"
@@ -102,45 +101,43 @@ export default function ComposeTweet() {
 
   return (
     <>
-      <AppLayout>
-        <Head>
-          <title>Crear un Devit / Devter 🐦</title>
-        </Head>
-        <section className="form-container">
-          <section className="avatar-container">
-            {user && <Avatar src={user.avatar} alt={user.username} />}
-          </section>
-          <form onSubmit={handleSubmit}>
-            <textarea
-              placeholder="Qué está pasando?"
-              onDragEnter={handleDragEnter}
-              onDragLeave={handleDragLeave}
-              onDrop={handleDrop}
-              onChange={handleChange}
-            ></textarea>
-            {imgURL && (
-              <section className="remove-img">
-                <button onClick={() => setImgURL(null)}>x</button>
-                <Image
-                  src={imgURL}
-                  alt="image"
-                  width={0}
-                  height={0}
-                  sizes="(max-width: 600px) 100vw, 600px"
-                  style={{
-                    width: "100%",
-                    height: "auto",
-                    borderRadius: "10px",
-                  }}
-                />
-              </section>
-            )}
-            <div>
-              <Button disabled={isButtonDisabled}>Devitear</Button>
-            </div>
-          </form>
+      <Head>
+        <title>Crear un Devit / Devter 🐦</title>
+      </Head>
+      <section className="form-container">
+        <section className="avatar-container">
+          {user && <Avatar src={user.avatar} alt={user.username} />}
         </section>
-      </AppLayout>
+        <form onSubmit={handleSubmit}>
+          <textarea
+            placeholder="Qué está pasando?"
+            onDragEnter={handleDragEnter}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+            onChange={handleChange}
+          ></textarea>
+          {imgURL && (
+            <section className="remove-img">
+              <button onClick={() => setImgURL(null)}>x</button>
+              <Image
+                src={imgURL}
+                alt="image"
+                width={0}
+                height={0}
+                sizes="(max-width: 600px) 100vw, 600px"
+                style={{
+                  width: "100%",
+                  height: "auto",
+                  borderRadius: "10px",
+                }}
+              />
+            </section>
+          )}
+          <div>
+            <Button disabled={isButtonDisabled}>Devitear</Button>
+          </div>
+        </form>
+      </section>
 
       <style jsx>
         {`
