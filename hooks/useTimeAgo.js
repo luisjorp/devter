@@ -22,7 +22,7 @@ const getDateDiffs = (timestamp) => {
 export default function useTimeAgo(timestamp) {
   const [timeAgo, setTimeAgo] = useState(() => getDateDiffs(timestamp))
 
-  const rtf = new Intl.RelativeTimeFormat(navigator.language, {
+  const rtf = new Intl.RelativeTimeFormat("es", {
     style: "short",
   })
 

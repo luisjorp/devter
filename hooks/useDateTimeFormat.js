@@ -1,6 +1,6 @@
 export default function useDateTimeFormat(timestamp) {
   const date = new Date(timestamp)
-  const language = navigator.language || "es-GT"
+  const language = "es-ES"
 
   const options = {
     month: "long",
