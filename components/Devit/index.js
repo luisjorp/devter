@@ -3,22 +3,29 @@ import useTimeAgo from "@/hooks/useTimeAgo"
 import Image from "next/image"
 import useDateTimeFormat from "@/hooks/useDateTimeFormat"
 import Link from "next/link"
+import { useRouter } from "next/router"
+
 export default function Devit({
   avatar,
-  base64,
   content,
   createdAt,
   id,
   img,
+  imgBase64,
   userId,
   userName,
 }) {
   const timeAgo = useTimeAgo(createdAt)
   const createdAtFormatted = useDateTimeFormat(createdAt)
+  const router = useRouter()
+  const handleArticleClick = (e) => {
+    e.preventDefault()
+    router.push(`/status/${id}`)
+  }
 
   return (
     <>
-      <article key={id}>
+      <article key={id} onClick={handleArticleClick}>
         <div>
           <Avatar src={avatar} alt={userName} />
         </div>
@@ -36,7 +43,7 @@ export default function Devit({
               src={img}
               alt={content}
               placeholder="blur"
-              blurDataURL={base64}
+              blurDataURL={imgBase64}
               width={0}
               height={0}
               priority={true}
@@ -58,6 +65,11 @@ export default function Devit({
           padding: 10px 15px;
         }
 
+        article:hover {
+          background: #f5f8fa;
+          cursor: pointer;
+        }
+
         section {
           flex: 1;
         }
@@ -74,6 +86,14 @@ export default function Devit({
         time {
           color: #555;
           font-size: 14px;
+        }
+
+        header :global(a) {
+          text-decoration: none;
+        }
+
+        header :global(a):hover {
+          text-decoration: underline;
         }
       `}</style>
     </>
