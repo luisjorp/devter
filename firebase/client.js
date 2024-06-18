@@ -50,17 +50,29 @@ export const onAuthStateChanged = (onChange) => {
   })
 }
 
-export const addDevit = ({ avatar, content, img, userId, userName }) => {
-  return db.collection("devits").add({
+export const addDevit = async ({ avatar, content, img, userId, userName }) => {
+  const devitData = {
     avatar,
     content,
-    img,
     userId,
     userName,
     createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
     likesCount: 0,
     sharedCount: 0,
-  })
+  }
+
+  if (img) {
+    try {
+      const imgBase64 = await getBase64(img)
+      devitData.img = img
+      devitData.imgBase64 = imgBase64
+    } catch (error) {
+      console.error("Error converting image to base64:", error)
+      throw new Error("Image processing failed")
+    }
+  }
+
+  return db.collection("devits").add(devitData)
 }
 
 export const fetchLatestDevits = () => {
@@ -69,27 +81,17 @@ export const fetchLatestDevits = () => {
     .orderBy("createdAt", "desc")
     .get()
     .then(({ docs }) => {
-      const promises = docs.map((doc) => {
+      return docs.map((doc) => {
         const data = doc.data()
         const id = doc.id
-        const { createdAt, img } = data
-        let base64Promise = Promise.resolve(null)
+        const { createdAt } = data
 
-        if (img) {
-          base64Promise = getBase64(img).then((b64) => {
-            return b64
-          })
-        }
-
-        return base64Promise.then((base64) => ({
+        return {
           ...data,
-          base64,
-          createdAt: +createdAt.toDate(),
           id,
-        }))
+          createdAt: +createdAt.toDate(),
+        }
       })
-
-      return Promise.all(promises)
     })
 }
 

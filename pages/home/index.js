@@ -42,7 +42,7 @@ export default function HomePage() {
               createdAt={devit.createdAt}
               id={devit.id}
               img={devit.img}
-              base64={devit.base64}
+              imgBase64={devit.imgBase64}
               key={devit.id}
               userId={devit.userId}
               userName={devit.userName}
