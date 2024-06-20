@@ -22,6 +22,8 @@ export default function HomePage() {
         setLoading(false)
       })
     }
+
+    // Cleanup to avoid memory leaks, this function is executed when the component is unmounted
     return () => unsubscribe && unsubscribe()
   }, [user])
 
