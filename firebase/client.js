@@ -75,25 +75,42 @@ export const addDevit = async ({ avatar, content, img, userId, userName }) => {
   return db.collection("devits").add(devitData)
 }
 
-export const fetchLatestDevits = () => {
+const mapDevitFromFirebaseToDevitObject = (doc) => {
+  const data = doc.data()
+  const id = doc.id
+  const { createdAt } = data
+
+  return {
+    ...data,
+    id,
+    createdAt: +createdAt.toDate(),
+  }
+}
+
+export const listenLatestDevits = (onChange) => {
+  return db
+    .collection("devits")
+    .orderBy("createdAt", "desc")
+    .limit(20)
+    .onSnapshot(({ docs }) => {
+      const newDevits = docs.map((doc) => {
+        return mapDevitFromFirebaseToDevitObject(doc)
+      })
+      onChange(newDevits)
+    })
+}
+
+/*export const fetchLatestDevits = () => {
   return db
     .collection("devits")
     .orderBy("createdAt", "desc")
     .get()
     .then(({ docs }) => {
       return docs.map((doc) => {
-        const data = doc.data()
-        const id = doc.id
-        const { createdAt } = data
-
-        return {
-          ...data,
-          id,
-          createdAt: +createdAt.toDate(),
-        }
+        return mapDevitFromFirebaseToDevitObject(doc)
       })
     })
-}
+}*/
 
 export const uploadImage = (file) => {
   const ref = firebase.storage().ref(`/images/${file.name}`)

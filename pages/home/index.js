@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import Devit from "@components/Devit"
 import useUser from "@/hooks/useUser"
-import { fetchLatestDevits } from "@/firebase/client"
+import { listenLatestDevits } from "@/firebase/client"
 import Loader from "@components/Loader"
 import Link from "next/link"
 import Create from "@components/icons/Create"
@@ -15,12 +15,14 @@ export default function HomePage() {
   const user = useUser()
 
   useEffect(() => {
+    let unsubscribe
     if (user) {
-      fetchLatestDevits().then((devits) => {
-        setTimeline(devits)
+      unsubscribe = listenLatestDevits((newDevits) => {
+        setTimeline(newDevits)
         setLoading(false)
       })
     }
+    return () => unsubscribe && unsubscribe()
   }, [user])
 
   return (
